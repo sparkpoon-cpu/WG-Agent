@@ -35,7 +35,7 @@ ENV NODE_ENV=production
 ENV PORT=3001
 ENV DB_PATH=/data/wg-agent.db
 ENV CLIENT_DIST=/app/client-dist
-ENV ADMIN_PASSWORD=wgagent123
+ENV ADMIN_PASSWORD=admin
 ENV JWT_SECRET=change-me-to-random-string
 
 EXPOSE 3001

@@ -68,7 +68,7 @@ export function initAdminUser(): void {
   if (existing) return
 
   // Read admin password from env or use default
-  const password = process.env.ADMIN_PASSWORD || 'wgadmin123'
+  const password = process.env.ADMIN_PASSWORD || 'admin'
   const hash = bcrypt.hashSync(password, 10)
   const { v4: uuid } = require('uuid')
 

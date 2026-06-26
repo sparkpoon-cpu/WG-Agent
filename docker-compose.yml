@@ -7,7 +7,7 @@ services:
     volumes:
       - wg-data:/data
     environment:
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-wgagent123}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - JWT_SECRET=${JWT_SECRET:-change-me-to-a-random-string}
     restart: unless-stopped
 

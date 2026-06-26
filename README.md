@@ -55,7 +55,7 @@ docker compose -f docker-compose.prod.yml up -d
 
 | 变量 | 默认值 | 说明 |
 |---|---|---|
-| ADMIN_PASSWORD | wgagent123 | 管理员初始密码 |
+| ADMIN_PASSWORD | admin | 管理员初始密码 |
 | JWT_SECRET | change-me-... | JWT 签名密钥 |
 | PORT | 3001 | 服务端口 |
 | DB_PATH | /data/wg-agent.db | SQLite 数据库路径 |
@@ -64,7 +64,7 @@ docker compose -f docker-compose.prod.yml up -d
 
 | 用户名 | 密码 |
 |---|---|
-| admin | wgagent123 |
+| admin | admin |
 
 首次登录后去 **设置** → 配置 DeepSeek API Key → 添加团队成员账号。
 
