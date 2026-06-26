@@ -1,0 +1,21 @@
+node_modules
+dist
+.DS_Store
+*.md
+!.deploy/*.md
+.git
+.gitignore
+
+# Client
+client/node_modules
+client/dist
+
+# Server
+server/node_modules
+server/wg-agent-server.db
+server/wg-agent-server.db-wal
+server/wg-agent-server.db-shm
+
+# Dev files
+.env.local
+/tmp

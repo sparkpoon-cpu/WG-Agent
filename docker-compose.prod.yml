@@ -1,0 +1,21 @@
+# NAS 生产部署配置
+# 用法：docker compose -f docker-compose.prod.yml up -d
+#
+# 需要把 ghcr.io/你的用户名/wg-agent 改成你的实际镜像地址
+# GitHub Actions 会在每次 push 时自动构建镜像
+
+services:
+  wg-agent:
+    image: ghcr.io/YOUR_USERNAME/wg-agent:latest
+    container_name: wg-agent
+    ports:
+      - "3001:3001"
+    volumes:
+      - wg-data:/data
+    environment:
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-wgagent123}
+      - JWT_SECRET=${JWT_SECRET:-change-me-to-random-string}
+    restart: unless-stopped
+
+volumes:
+  wg-data:

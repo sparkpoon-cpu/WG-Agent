@@ -1,0 +1,15 @@
+services:
+  wg-agent:
+    build: .
+    container_name: wg-agent
+    ports:
+      - "3001:3001"
+    volumes:
+      - wg-data:/data
+    environment:
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-wgagent123}
+      - JWT_SECRET=${JWT_SECRET:-change-me-to-a-random-string}
+    restart: unless-stopped
+
+volumes:
+  wg-data:
