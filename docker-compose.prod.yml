@@ -6,7 +6,7 @@
 
 services:
   wg-agent:
-    image: ghcr.io/YOUR_USERNAME/wg-agent:latest
+    image: ghcr.io/sparkpoon-cpu/wg-agent:latest
     container_name: wg-agent
     ports:
       - "3001:3001"
