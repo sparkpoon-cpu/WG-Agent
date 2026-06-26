@@ -17,6 +17,9 @@ export function SettingsView(): React.ReactElement {
   const [testMessage, setTestMessage] = useState('')
   const [addUser, setAddUser] = useState({ username: '', password: '' })
   const [addMsg, setAddMsg] = useState('')
+  const [pwdForm, setPwdForm] = useState({ current: '', new: '', confirm: '' })
+  const [pwdMsg, setPwdMsg] = useState('')
+  const [pwdErr, setPwdErr] = useState(false)
 
   useEffect(() => {
     api.getSettings().then(setSettings).catch(() => {})
@@ -63,6 +66,34 @@ export function SettingsView(): React.ReactElement {
       setAddUser({ username: '', password: '' })
     } catch (err: any) {
       setAddMsg(err.message || '创建失败')
+    }
+  }
+
+  const handleChangePassword = async (): Promise<void> => {
+    const { current, new: newPwd, confirm } = pwdForm
+    if (!current || !newPwd || !confirm) {
+      setPwdMsg('请填写所有字段')
+      setPwdErr(true)
+      return
+    }
+    if (newPwd !== confirm) {
+      setPwdMsg('两次输入的新密码不一致')
+      setPwdErr(true)
+      return
+    }
+    if (newPwd.length < 3) {
+      setPwdMsg('新密码至少 3 位')
+      setPwdErr(true)
+      return
+    }
+    try {
+      const res = await api.changePassword(current, newPwd)
+      setPwdMsg(res.message || '密码修改成功')
+      setPwdErr(false)
+      setPwdForm({ current: '', new: '', confirm: '' })
+    } catch (err: any) {
+      setPwdMsg(err.message || '修改失败')
+      setPwdErr(true)
     }
   }
 
@@ -161,6 +192,50 @@ export function SettingsView(): React.ReactElement {
                   {label}
                 </button>
               ))}
+            </div>
+          </section>
+
+          {/* 修改密码 */}
+          <section className="space-y-4">
+            <div>
+              <h3 className="text-[15px] font-semibold text-foreground">修改密码</h3>
+              <p className="mt-1 text-[13px] text-muted-foreground/60">修改当前登录账号的密码</p>
+            </div>
+            <div className="space-y-2">
+              <input
+                type="password"
+                value={pwdForm.current}
+                onChange={(e) => setPwdForm({ ...pwdForm, current: e.target.value })}
+                placeholder="当前密码"
+                className="w-full rounded-xl border border-border bg-secondary/30 px-4 py-2.5 text-[13px] outline-none transition-all focus:border-ring/30 focus:bg-background focus:ring-2 focus:ring-ring/5"
+              />
+              <div className="flex gap-2">
+                <input
+                  type="password"
+                  value={pwdForm.new}
+                  onChange={(e) => setPwdForm({ ...pwdForm, new: e.target.value })}
+                  placeholder="新密码"
+                  className="flex-1 rounded-xl border border-border bg-secondary/30 px-4 py-2.5 text-[13px] outline-none transition-all focus:border-ring/30 focus:bg-background focus:ring-2 focus:ring-ring/5"
+                />
+                <input
+                  type="password"
+                  value={pwdForm.confirm}
+                  onChange={(e) => setPwdForm({ ...pwdForm, confirm: e.target.value })}
+                  placeholder="确认新密码"
+                  className="flex-1 rounded-xl border border-border bg-secondary/30 px-4 py-2.5 text-[13px] outline-none transition-all focus:border-ring/30 focus:bg-background focus:ring-2 focus:ring-ring/5"
+                />
+              </div>
+              <button
+                onClick={handleChangePassword}
+                className="rounded-xl bg-primary px-5 py-2.5 text-[13px] font-medium text-primary-foreground hover:bg-primary/90 active:scale-[0.97] transition-all shadow-sm"
+              >
+                修改密码
+              </button>
+              {pwdMsg && (
+                <p className={`text-[13px] ${pwdErr ? 'text-destructive' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                  {pwdMsg}
+                </p>
+              )}
             </div>
           </section>
 

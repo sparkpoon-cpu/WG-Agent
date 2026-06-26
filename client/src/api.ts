@@ -52,6 +52,12 @@ export const api = {
   listUsers: () =>
     request<Array<{ id: string; username: string; isAdmin: boolean; createdAt: string }>>('/auth/users'),
 
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ success: boolean; message: string }>('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword })
+    }),
+
   // Projects
   listProjects: () =>
     request<Array<{ id: string; name: string; description: string; color: string; sortOrder: number }>>('/projects'),

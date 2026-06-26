@@ -58,6 +58,39 @@ router.post(
   }
 )
 
+// Change password (any authenticated user)
+router.post('/change-password', authMiddleware, (req: Request, res: Response) => {
+  const { currentPassword, newPassword } = req.body
+  if (!currentPassword || !newPassword) {
+    res.status(400).json({ error: '当前密码和新密码不能为空' })
+    return
+  }
+  if (newPassword.length < 3) {
+    res.status(400).json({ error: '新密码至少 3 位' })
+    return
+  }
+
+  const db = getDb()
+  const user = db
+    .prepare('SELECT password_hash FROM users WHERE id = ?')
+    .get(req.user!.id) as { password_hash: string } | undefined
+
+  if (!user) {
+    res.status(404).json({ error: '用户不存在' })
+    return
+  }
+
+  const valid = bcrypt.compareSync(currentPassword, user.password_hash)
+  if (!valid) {
+    res.status(401).json({ error: '当前密码错误' })
+    return
+  }
+
+  const newHash = bcrypt.hashSync(newPassword, 10)
+  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(newHash, req.user!.id)
+  res.json({ success: true, message: '密码修改成功' })
+})
+
 // List users (admin only)
 router.get('/users', authMiddleware, (req: Request, res: Response) => {
   if (!req.user?.isAdmin) {
